@@ -29,6 +29,7 @@ async function embedNewProject() {
   for (const button of document.querySelectorAll<HTMLButtonElement>('button:disabled')) {
     button.disabled = false;
   }
+  await writeToFiles();
 }
 
 async function openFiles() {
@@ -51,6 +52,7 @@ async function writeToFiles() {
   const js = files['index.js'] ?? '';
   const time = new Date().toTimeString();
 
+  console.log('calling applyFsDiff')
   await vm.applyFsDiff({
     create: {
       'index.html': `${html}\n<!-- New random content at ${time} -->`,
@@ -58,6 +60,7 @@ async function writeToFiles() {
     },
     destroy: [],
   });
+  console.log('finished calling applyFsDiff')
 }
 
 function setup() {
