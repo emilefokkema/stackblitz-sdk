@@ -11,7 +11,7 @@ export function connect(frameEl: HTMLIFrameElement, options?: VMOptions): Promis
   if (!frameEl?.contentWindow) {
     return Promise.reject('Provided element is not an iframe.');
   }
-  const connection = getConnection(frameEl) ?? new Connection(frameEl);
+  const connection = getConnection(frameEl) ?? new Connection(frameEl, options);
   return connection.pending;
 }
 
@@ -64,7 +64,7 @@ export function embedProject(
   // HTML needs to be written after iframe is embedded
   frame.contentDocument?.write(html);
 
-  return connect(frame);
+  return connect(frame, options);
 }
 
 /**
@@ -83,7 +83,7 @@ export function embedProjectId(
 
   replaceAndEmbed(element, frame, options);
 
-  return connect(frame);
+  return connect(frame, options);
 }
 
 /**
@@ -102,5 +102,5 @@ export function embedGithubProject(
 
   replaceAndEmbed(element, frame, options);
 
-  return connect(frame);
+  return connect(frame, options);
 }
