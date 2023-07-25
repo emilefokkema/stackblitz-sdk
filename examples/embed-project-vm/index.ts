@@ -21,6 +21,7 @@ async function embedNewProject() {
   vm = await sdk.embedProject('embed', project, {
     openFile: 'index.html',
     view: 'editor',
+    requestTimeout: 500
   });
 
   (window as any).__vm__ = vm;
@@ -53,14 +54,19 @@ async function writeToFiles() {
   const time = new Date().toTimeString();
 
   console.log('calling applyFsDiff')
-  await vm.applyFsDiff({
-    create: {
-      'index.html': `${html}\n<!-- New random content at ${time} -->`,
-      'index.js': `${js}\n// Random content at ${time}`,
-    },
-    destroy: [],
-  });
-  console.log('finished calling applyFsDiff')
+  try{
+    await vm.applyFsDiff({
+      create: {
+        'index.html': `${html}\n<!-- New random content at ${time} -->`,
+        'index.js': `${js}\n// Random content at ${time}`,
+      },
+      destroy: [],
+    });
+    console.log('finished calling applyFsDiff')
+  }catch(e){
+    console.error('error calling applyFsDiff:', e)
+  }
+  
 }
 
 function setup() {
